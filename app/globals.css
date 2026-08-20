@@ -91,10 +91,15 @@ input,textarea,select{font-family:inherit;}
 
 .latest-list{padding:10px 0 8px;}
 .latest-item{
-  display:block;
+  display:flex;gap:20px;align-items:flex-start;
   padding:20px 0;border-bottom:1px solid var(--line);
 }
 .latest-item:hover h3{color:var(--forest);}
+.latest-img{
+  flex:0 0 160px;aspect-ratio:4/3;background-size:cover;background-position:center;
+  background-color:#EFEFEA;border-radius:4px;
+}
+.latest-text{flex:1;min-width:0;}
 .latest-item h3{
   font-family:var(--font-serif);font-weight:600;font-size:19px;line-height:1.3;margin:0 0 6px;
 }

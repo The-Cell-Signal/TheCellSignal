@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Source_Serif_4, Inter } from 'next/font/google';
+import { Space_Grotesk, Inter } from 'next/font/google';
 import { Suspense } from 'react';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import './globals.css';
 
-const serif = Source_Serif_4({
+const serif = Space_Grotesk({
   subsets: ['latin'],
   weight: ['500', '600', '700'],
   variable: '--font-serif'
