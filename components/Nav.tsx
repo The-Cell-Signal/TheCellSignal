@@ -13,8 +13,7 @@ export default function Nav() {
   return (
     <div className="nav">
       <Link href="/" className="wordmark">
-        <img src="/wordmark.svg" alt="CZRO Bio" className="nav-logo" />
-        <span className="nav-wordtext">The Cell Signal</span>
+        <img src="/wordmark.svg" alt="The Cell Signal" className="nav-logo" />
       </Link>
 
       <div className="nav-links">

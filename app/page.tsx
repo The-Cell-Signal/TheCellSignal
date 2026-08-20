@@ -40,8 +40,8 @@ export default async function HomePage({
 
   const featured = list.find((s) => s.featured) ?? list[0];
   const rest = list.filter((s) => s.id !== featured.id);
-  const latest = rest.slice(0, 4);
-  const more = rest.slice(4);
+  const latest = rest.slice(0, 2);
+  const more = rest.slice(2);
 
   return (
     <>
