@@ -27,18 +27,26 @@ export async function middleware(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
-  const isLoginRoute = request.nextUrl.pathname === '/admin/login';
+  const pathname = request.nextUrl.pathname;
+  const isAdminPage = pathname.startsWith('/admin');
+  const isNewsletterPage = pathname.startsWith('/newsletter');
+  const isNewsletterApi = pathname.startsWith('/api/newsletter');
+  const isLoginRoute = pathname === '/admin/login';
 
-  if (isAdminRoute && !isLoginRoute && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin/login';
-    return NextResponse.redirect(url);
+  if (!user && !isLoginRoute) {
+    if (isNewsletterApi) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    if (isAdminPage || isNewsletterPage) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/admin/login';
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;
 }
 
 export const config = {
-  matcher: ['/admin/:path*']
+  matcher: ['/admin/:path*', '/newsletter/:path*', '/api/newsletter/:path*']
 };
