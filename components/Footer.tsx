@@ -24,9 +24,8 @@ export default function Footer() {
         </div>
         <div className="footer-col">
           <h4>Follow us</h4>
-          <a href="#">LinkedIn</a>
-          <a href="#">Instagram</a>
-          <a href="#">YouTube</a>
+          <a href="https://ca.linkedin.com/company/czrobio">LinkedIn</a>
+          <a href="https://www.youtube.com/@czrobio">YouTube</a>
         </div>
       </div>
       <div className="footer-bottom">
