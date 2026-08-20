@@ -10,8 +10,10 @@ export default function Nav({ isAdmin }: { isAdmin: boolean }) {
   const current = searchParams.get('category') ?? 'All';
   const cats = ['All', ...CATEGORIES];
 
+  const showBanner = pathname === '/' || pathname === '/newsletter';
+
   return (
-    <div className="nav">
+    <div className={`nav ${showBanner ? 'nav-banner' : ''}`}>
       <div className="nav-links">
         {pathname === '/'
           ? cats.map((c) => (
@@ -29,7 +31,11 @@ export default function Nav({ isAdmin }: { isAdmin: boolean }) {
       </div>
 
       <Link href="/" className="wordmark">
-        <img src="/wordmark.svg" alt="The Cell Signal" className="nav-logo" />
+        <img
+          src={showBanner ? '/wordmark-white.svg' : '/wordmark.svg'}
+          alt="The Cell Signal"
+          className="nav-logo"
+        />
       </Link>
 
       <div className="nav-actions">

@@ -168,3 +168,19 @@ input,textarea,select{font-family:inherit;}
   .footer-grid{grid-template-columns:1fr 1fr;}
   .field-row{grid-template-columns:1fr;}
 }
+
+
+/* ===== header banner ===== */
+.nav-banner{
+  background-image:url('/banner.jpg');
+  background-size:cover;
+  background-position:center;
+  border-bottom:none;
+}
+.nav-banner .nav-links a{color:rgba(255,255,255,0.85);}
+.nav-banner .nav-links a.active{color:#fff;border-bottom-color:#fff;}
+.nav-banner .nav-links a:hover{color:#fff;}
+.nav-banner .btn{border-color:#fff;color:#fff;}
+.nav-banner .btn:not(.btn-primary):hover{background:rgba(255,255,255,0.15);}
+.nav-banner .btn-primary{background:#fff;color:var(--ink);}
+.nav-banner .btn-primary:hover{background:rgba(255,255,255,0.85);}
