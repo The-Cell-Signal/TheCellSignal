@@ -5,10 +5,7 @@ export default function Footer() {
     <div className="footer">
       <div className="footer-grid">
         <div>
-          <div className="footer-wordmark">
-            <span className="footer-dot" />
-            The Cell Signal
-          </div>
+          <img src="/wordmark.svg" alt="CZRO Bio" className="footer-logo" />
           <p className="footer-tag">
             Powered by nature, verified by science. Published by CZRO Bio &mdash; cultivating
             microalgae to turn CO2, waste and light into cleaner soil, water and energy.
