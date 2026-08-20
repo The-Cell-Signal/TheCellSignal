@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSearchParams, usePathname } from 'next/navigation';
 import { CATEGORIES } from '@/lib/types';
 
-export default function Nav() {
+export default function Nav({ isAdmin }: { isAdmin: boolean }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const current = searchParams.get('category') ?? 'All';
@@ -12,10 +12,6 @@ export default function Nav() {
 
   return (
     <div className="nav">
-      <Link href="/" className="wordmark">
-        <img src="/wordmark.svg" alt="The Cell Signal" className="nav-logo" />
-      </Link>
-
       <div className="nav-links">
         {pathname === '/'
           ? cats.map((c) => (
@@ -32,13 +28,21 @@ export default function Nav() {
             )}
       </div>
 
+      <Link href="/" className="wordmark">
+        <img src="/wordmark.svg" alt="The Cell Signal" className="nav-logo" />
+      </Link>
+
       <div className="nav-actions">
-        <Link href="/newsletter" className="btn">
-          Generate newsletter
-        </Link>
-        <Link href="/admin" className="btn btn-primary">
-          Admin
-        </Link>
+        {isAdmin && (
+          <>
+            <Link href="/newsletter" className="btn">
+              Generate newsletter
+            </Link>
+            <Link href="/admin" className="btn btn-primary">
+              Admin
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

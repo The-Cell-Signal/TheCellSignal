@@ -3,6 +3,7 @@ import { Source_Serif_4, Inter } from 'next/font/google';
 import { Suspense } from 'react';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import { createClient } from '@/lib/supabase/server';
 import './globals.css';
 
 const serif = Source_Serif_4({
@@ -23,12 +24,17 @@ export const metadata: Metadata = {
     'The people, partnerships and science turning CO2 and waste into cleaner soil, water and energy.'
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>
         <Suspense fallback={<div className="nav" />}>
-          <Nav />
+          <Nav isAdmin={!!user} />
         </Suspense>
         <div className="container">{children}</div>
         <Footer />
