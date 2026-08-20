@@ -141,6 +141,10 @@ export default function StoryForm({ story }: { story?: Story }) {
           onChange={(e) => setBody(e.target.value)}
           placeholder="Write the full story here..."
         />
+        <p className="muted" style={{ marginTop: -4, marginBottom: 0 }}>
+          Tip: add a photo inline by putting <code>![Caption text](image URL)</code> on its own line,
+          with a blank line before and after it.
+        </p>
         {errors.body && <p className="err">{errors.body}</p>}
       </div>
 

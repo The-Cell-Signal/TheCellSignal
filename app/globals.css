@@ -108,7 +108,14 @@ input,textarea,select{font-family:inherit;}
 .detail-img{width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;border-radius:4px;margin-bottom:20px;background-color:#EFEFEA;}
 .detail-body h2{font-family:var(--font-serif);font-size:28px;font-weight:600;line-height:1.2;margin:0 0 10px;}
 .detail-body .dek{font-size:16px;margin:0 0 12px;}
-.detail-content{font-size:15px;line-height:1.75;color:var(--ink);white-space:pre-wrap;margin-top:18px;}
+.detail-content{font-size:15px;line-height:1.75;color:var(--ink);margin-top:18px;}
+.detail-content p{margin:0 0 18px;}
+.story-figure{margin:26px 0;}
+.story-figure img{width:100%;display:block;border-radius:4px;}
+.story-figure figcaption{font-size:12.5px;color:var(--muted);margin-top:8px;font-style:italic;}
+.story-grid{display:grid;grid-template-columns:1fr 300px;gap:44px;padding-top:36px;padding-bottom:60px;}
+.story-main{min-width:0;}
+@media (max-width:900px){.story-grid{grid-template-columns:1fr;}}
 
 .field{margin-bottom:16px;}
 .field label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:6px;}
