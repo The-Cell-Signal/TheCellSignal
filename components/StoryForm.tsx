@@ -23,7 +23,6 @@ export default function StoryForm({ story }: { story?: Story }) {
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
-  // Inline image (within the story body) state
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const inlineFileInputRef = useRef<HTMLInputElement>(null);
   const [inlineUploading, setInlineUploading] = useState(false);
@@ -108,6 +107,28 @@ export default function StoryForm({ story }: { story?: Story }) {
     insertImageIntoBody(pendingImage.url, pendingCaption.trim());
     setPendingImage(null);
     setPendingCaption('');
+  }
+
+  function wrapSelection(marker: string, placeholder: string) {
+    const textarea = bodyRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = body.slice(start, end) || placeholder;
+    const before = body.slice(0, start);
+    const after = body.slice(end);
+
+    const wrapped = marker + selected + marker;
+    const newBody = before + wrapped + after;
+    setBody(newBody);
+
+    requestAnimationFrame(() => {
+      textarea.focus();
+      const selStart = before.length + marker.length;
+      const selEnd = selStart + selected.length;
+      textarea.setSelectionRange(selStart, selEnd);
+    });
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -201,14 +222,25 @@ export default function StoryForm({ story }: { story?: Story }) {
 
       <div className={`field ${errors.body ? 'has-err' : ''}`}>
         <label>Story body</label>
-        <textarea
-          ref={bodyRef}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          placeholder="Write the full story here..."
-        />
 
-        <div className="inline-image-toolbar">
+        <div className="editor-toolbar">
+          <button
+            type="button"
+            className="toolbar-btn"
+            onClick={() => wrapSelection('**', 'bold text')}
+            title="Bold"
+          >
+            <strong>B</strong>
+          </button>
+          <button
+            type="button"
+            className="toolbar-btn"
+            onClick={() => wrapSelection('*', 'italic text')}
+            title="Italic"
+          >
+            <em>I</em>
+          </button>
+          <span className="toolbar-divider" />
           <button
             type="button"
             className="btn"
@@ -225,6 +257,13 @@ export default function StoryForm({ story }: { story?: Story }) {
             onChange={handleInlineFileChange}
           />
         </div>
+
+        <textarea
+          ref={bodyRef}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          placeholder="Write the full story here..."
+        />
 
         {pendingImage && (
           <div className="inline-image-pending">
@@ -243,6 +282,10 @@ export default function StoryForm({ story }: { story?: Story }) {
             </button>
           </div>
         )}
+
+        <p className="muted" style={{ marginTop: 8 }}>
+          Select text and click B or I to format. You can also type manually: **bold**, *italic*.
+        </p>
 
         {errors.body && <p className="err">{errors.body}</p>}
       </div>
