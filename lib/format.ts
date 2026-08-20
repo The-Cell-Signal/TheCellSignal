@@ -21,3 +21,8 @@ export function slugify(title: string): string {
     .replace(/(^-|-$)+/g, '')
     .slice(0, 80);
 }
+
+export function readingTime(body: string): number {
+  const words = body.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
