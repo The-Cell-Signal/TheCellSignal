@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -23,6 +23,13 @@ export default function StoryForm({ story }: { story?: Story }) {
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
+  // Inline image (within the story body) state
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const inlineFileInputRef = useRef<HTMLInputElement>(null);
+  const [inlineUploading, setInlineUploading] = useState(false);
+  const [pendingImage, setPendingImage] = useState<{ url: string } | null>(null);
+  const [pendingCaption, setPendingCaption] = useState('');
+
   async function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -43,6 +50,64 @@ export default function StoryForm({ story }: { story?: Story }) {
 
     const { data } = supabase.storage.from('story-images').getPublicUrl(path);
     setImageUrl(data.publicUrl);
+  }
+
+  async function handleInlineFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setInlineUploading(true);
+    const supabase = createClient();
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+    const path = `inline-${Date.now()}-${safeName}`;
+
+    const { error } = await supabase.storage.from('story-images').upload(path, file);
+    setInlineUploading(false);
+
+    if (error) {
+      alert('Image upload failed: ' + error.message);
+      return;
+    }
+
+    const { data } = supabase.storage.from('story-images').getPublicUrl(path);
+    setPendingImage({ url: data.publicUrl });
+    setPendingCaption('');
+    if (inlineFileInputRef.current) inlineFileInputRef.current.value = '';
+  }
+
+  function insertImageIntoBody(url: string, caption: string) {
+    const snippet = `![${caption}](${url})`;
+    const textarea = bodyRef.current;
+
+    if (!textarea) {
+      setBody((prev) => (prev ? `${prev}\n\n${snippet}\n\n` : `${snippet}\n\n`));
+      return;
+    }
+
+    const start = textarea.selectionStart ?? body.length;
+    const end = textarea.selectionEnd ?? body.length;
+    const before = body.slice(0, start);
+    const after = body.slice(end);
+
+    const prefix = before.length === 0 ? '' : before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n';
+    const suffix = after.length === 0 ? '' : after.startsWith('\n\n') ? '' : after.startsWith('\n') ? '\n' : '\n\n';
+
+    const insertion = prefix + snippet + suffix;
+    const newBody = before + insertion + after;
+    setBody(newBody);
+
+    requestAnimationFrame(() => {
+      textarea.focus();
+      const pos = (before + insertion).length;
+      textarea.setSelectionRange(pos, pos);
+    });
+  }
+
+  function handleInsertPendingImage() {
+    if (!pendingImage) return;
+    insertImageIntoBody(pendingImage.url, pendingCaption.trim());
+    setPendingImage(null);
+    setPendingCaption('');
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -137,14 +202,48 @@ export default function StoryForm({ story }: { story?: Story }) {
       <div className={`field ${errors.body ? 'has-err' : ''}`}>
         <label>Story body</label>
         <textarea
+          ref={bodyRef}
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder="Write the full story here..."
         />
-        <p className="muted" style={{ marginTop: -4, marginBottom: 0 }}>
-          Tip: add a photo inline by putting <code>![Caption text](image URL)</code> on its own line,
-          with a blank line before and after it.
-        </p>
+
+        <div className="inline-image-toolbar">
+          <button
+            type="button"
+            className="btn"
+            onClick={() => inlineFileInputRef.current?.click()}
+            disabled={inlineUploading}
+          >
+            {inlineUploading ? 'Uploading…' : '+ Insert image'}
+          </button>
+          <input
+            ref={inlineFileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleInlineFileChange}
+          />
+        </div>
+
+        {pendingImage && (
+          <div className="inline-image-pending">
+            <img src={pendingImage.url} alt="" className="pending-thumb" />
+            <input
+              type="text"
+              value={pendingCaption}
+              onChange={(e) => setPendingCaption(e.target.value)}
+              placeholder="Caption (optional)"
+            />
+            <button type="button" className="btn btn-primary" onClick={handleInsertPendingImage}>
+              Insert into story
+            </button>
+            <button type="button" className="btn" onClick={() => setPendingImage(null)}>
+              Cancel
+            </button>
+          </div>
+        )}
+
         {errors.body && <p className="err">{errors.body}</p>}
       </div>
 
