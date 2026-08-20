@@ -184,3 +184,13 @@ input,textarea,select{font-family:inherit;}
 .nav-banner .btn:not(.btn-primary):hover{background:rgba(255,255,255,0.15);}
 .nav-banner .btn-primary{background:#fff;color:var(--ink);}
 .nav-banner .btn-primary:hover{background:rgba(255,255,255,0.85);}
+
+
+/* ===== inline image insert (story editor) ===== */
+.inline-image-toolbar{margin-top:8px;}
+.inline-image-pending{
+  display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px;
+  border:1px solid var(--line);border-radius:4px;background:#F8F9F7;
+}
+.pending-thumb{width:60px;height:45px;object-fit:cover;border-radius:3px;flex-shrink:0;}
+.inline-image-pending input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:4px;font-size:13px;}
