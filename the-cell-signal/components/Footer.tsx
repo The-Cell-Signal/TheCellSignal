@@ -1,0 +1,41 @@
+import Link from 'next/link';
+
+export default function Footer() {
+  return (
+    <div className="footer">
+      <div className="footer-grid">
+        <div>
+          <div className="footer-wordmark">
+            <span className="footer-dot" />
+            The Cell Signal
+          </div>
+          <p className="footer-tag">
+            Powered by nature, verified by science. Published by CZRO Bio &mdash; cultivating
+            microalgae to turn CO2, waste and light into cleaner soil, water and energy.
+          </p>
+        </div>
+        <div className="footer-col">
+          <h4>Get in touch</h4>
+          <a href="https://czrobio.com/contact/">Contact us</a>
+          <a href="https://czrobio.com/contact/">Submit a story tip</a>
+        </div>
+        <div className="footer-col">
+          <h4>About us</h4>
+          <a href="https://czrobio.com/about/company/">Our company</a>
+          <a href="https://czrobio.com/solutions/microalgae-farm/">Our solutions</a>
+          <Link href="/newsletter">Newsletter</Link>
+        </div>
+        <div className="footer-col">
+          <h4>Follow us</h4>
+          <a href="#">LinkedIn</a>
+          <a href="#">Instagram</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <span>Vancouver, Canada</span>
+        <span>&copy; CZRO Bio {new Date().getFullYear()}</span>
+      </div>
+    </div>
+  );
+}
